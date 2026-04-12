@@ -1,13 +1,36 @@
 <script setup>
 import Navbar from '@/Components/Navbar.vue';
 import { ref } from 'vue';
-defineProps({
-   product : Object,
-})
+import { useCartStore } from '@/stores/cartStore';
+import { useToast } from 'vue-toastification';
+const toast = useToast();
 
+const toastOptions = {
+    position: "top-right",
+    timeout: 3000,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    showCloseButtonOnHover: false,
+    hideProgressBar: false,
+    closeButton: "button",
+    icon: true,
+};
+const props = defineProps({
+    product: Object,
+})
 const sizes = [6, 7, 8, 9, 10, 11];
 const selectedSize = ref(null);
+const cartStore = useCartStore();
 
+function addToCart() {
+    if (!selectedSize.value) {
+        toast.error('Please select a size before adding to cart.', toastOptions);
+        return;
+    }
+    cartStore.addToCart(props.product, selectedSize.value);
+    toast.success('Product added to cart!', toastOptions);
+}
 
 </script>
 
@@ -43,7 +66,7 @@ const selectedSize = ref(null);
         </button>
     </div>
 </div>
-                <button class="bg-black text-white px-8 py-3 rounded-full font-bold hover:bg-yellow-400 hover:text-black transition w-fit">
+                <button @click="addToCart" class="bg-black text-white px-8 py-3 rounded-full font-bold hover:bg-yellow-400 hover:text-black transition w-fit">
                     Add to Cart
                 </button>
             </div>
