@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -24,8 +25,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/products', function () {
-    return Inertia::render('Products');
-})->name('products');
+Route::get('/products', [ProductController::class, 'index'])->name('products');
+Route::get('/products/{id}', function ($id) {
+    return Inertia::render('ProductDetail', ['id' => $id]);
+})->name('product.detail');
 
 require __DIR__.'/auth.php';
