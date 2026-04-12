@@ -58,7 +58,7 @@ const filteredProducts = computed(() => {
     <div class="flex-1 p-8">
         <h1   class="text-2xl font-bold mb-6">All Products</h1>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <ProductCard v-for="product in filteredProducts" :key="product.id" :name="product.name" :price="product.price" :originalPrice="product.original_price" :image="product.image" />
+            <ProductCard :id="product.id" v-for="product in filteredProducts" :key="product.id" :name="product.name" :price="product.price" :originalPrice="product.original_price" :image="product.image" />
         </div>
     </div>
 

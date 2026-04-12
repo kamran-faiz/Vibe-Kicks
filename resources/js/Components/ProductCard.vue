@@ -1,6 +1,10 @@
 <script setup>
+import { Link } from '@inertiajs/vue3';
+
+
 
 defineProps({
+    id: Number,
     name: String,
     price: Number,
     originalPrice: Number,
@@ -10,7 +14,7 @@ defineProps({
 </script>
 
 <template>
-    
+    <Link :href="`/products/${id}`">
     <div class="relative flex flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
   <a class="relative mx-3 mt-3 flex h-72 overflow-hidden rounded-xl" href="#">
     <img class="object-cover w-full h-full" :src="image" alt="product image" />
@@ -52,5 +56,6 @@ defineProps({
     >
   </div>
 </div>
+    </Link>
 
 </template>
