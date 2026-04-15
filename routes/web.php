@@ -6,14 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ProductController;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -21,6 +14,8 @@ Route::get('/dashboard', function () {
 Route::get('/cart', function (){
     return Inertia::render('Cart');
 });
+
+Route::get('/', [ProductController::class, 'featured'])->name('welcome');
 
 Route::get('/shop', [ProductController::class, 'index'])->name('shop');
 

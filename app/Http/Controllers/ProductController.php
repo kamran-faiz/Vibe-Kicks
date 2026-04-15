@@ -25,4 +25,9 @@ class ProductController extends Controller
       // Return the product details as JSON response
       return Inertia::render('ProductDetail', ['product' => $product]);
   }
+  public function featured(){
+    return Inertia::render('Welcome',[
+        'products' => \App\Models\Product::where('is_featured', true)->get()
+    ]);
+  }
 }
