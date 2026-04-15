@@ -22,6 +22,6 @@ const products = [
     <p class="text-gray-500 mt-4 text-lg">Handpicked styles for every vibe</p>
 </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-10">
-        <ProductCard v-for="product in products" :key="product.id" :name="product.name" :price="product.price" :originalPrice="product.originalPrice" :image="product.image" />
+        <ProductCard v-for="product in products" :key="product.id" :id="product.id" :name="product.name" :price="product.price" :originalPrice="product.originalPrice" :image="product.image" />
     </div>
 </template>

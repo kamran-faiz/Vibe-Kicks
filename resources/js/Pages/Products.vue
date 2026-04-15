@@ -25,7 +25,7 @@ const filteredProducts = computed(() => {
 <template>
     <Navbar />
      
-    <div class="flex min-h-screen bg-gray-50">
+    <div class="flex min-h-screen bg-gray-100">
     
     <!-- Left Sidebar - Filters -->
     <div class="w-64 bg-white p-6 shadow-sm">

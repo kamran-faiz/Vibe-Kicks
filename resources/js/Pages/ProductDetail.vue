@@ -28,7 +28,7 @@ function addToCart() {
         toast.error('Please select a size before adding to cart.', toastOptions);
         return;
     }
-    cartStore.addToCart(props.product, selectedSize.value);
+    cartStore.addToCart({ ...props.product, size: selectedSize.value });
     toast.success('Product added to cart!', toastOptions);
 }
 
@@ -36,6 +36,7 @@ function addToCart() {
 
 <template>
     <Navbar />
+    <div class="min-h-screen bg-gray-100">
     <div class="container mx-auto px-8 py-12">
         <div class="flex flex-col md:flex-row gap-12">
             
@@ -73,5 +74,6 @@ function addToCart() {
          
 
         </div>
+    </div>
     </div>
 </template>
