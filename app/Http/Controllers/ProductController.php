@@ -11,10 +11,11 @@ class ProductController extends Controller
   public function index()
   {
       // Fetch products from the database
-      $products = Product::all();
       
       // Return products as JSON response
-      return Inertia::render('Products', ['products' => $products]);
+      return Inertia::render('Shop', [
+        'products' => \App\Models\Product::all()
+      ]);
   }
   public function show($id)
   {

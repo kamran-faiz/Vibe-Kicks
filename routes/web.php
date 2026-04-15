@@ -22,6 +22,16 @@ Route::get('/cart', function (){
     return Inertia::render('Cart');
 });
 
+Route::get('/shop', [ProductController::class, 'index'])->name('shop');
+
+Route::get('/collections' , function (){
+    return Inertia::render('Collections');
+});
+
+Route::get('/our-story', function (){
+    return Inertia::render('About');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
