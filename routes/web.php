@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
 
 
 
@@ -33,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/checkout',[CheckoutController::class, 'store'])->name('checkout');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
 });
 
 Route::get('/products', [ProductController::class, 'index'])->name('products');
