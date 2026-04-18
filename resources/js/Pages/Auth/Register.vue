@@ -1,10 +1,8 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import { ref, onMounted } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import gsap from 'gsap';
+import AuthLayout from '@/Components/AuthLayout.vue';
 
 const form = useForm({
     name: '',
@@ -13,101 +11,79 @@ const form = useForm({
     password_confirmation: '',
 });
 
+const formRef = ref(null);
+
+onMounted(() => {
+    gsap.set(formRef.value, { y: 40, opacity: 0 });
+    gsap.to(formRef.value, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out", delay: 0.4 });
+});
+
 const submit = () => {
     form.post(route('register'), {
+        onError: () => {
+            gsap.fromTo(formRef.value,
+                { x: 0 },
+                { keyframes: { x: [-12, 12, -10, 10, -6, 6, -3, 3, 0] }, duration: 0.6, ease: "power2.out" }
+            );
+        },
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
 </script>
 
 <template>
-    <GuestLayout>
-        <Head title="Register" />
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
-
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
-
-                <InputError class="mt-2" :message="form.errors.name" />
+    <Head title="Register" />
+    <AuthLayout>
+        <div ref="formRef">
+            <div class="mb-6">
+                <p class="text-xs font-semibold tracking-[0.2em] uppercase text-gray-400 mb-3">New Account</p>
+                <h1 class="text-4xl sm:text-5xl font-bold text-black leading-tight">
+                    Join the culture<span class="text-yellow-400">.</span>
+                </h1>
+                <p class="mt-3 text-gray-500">Create your Vibe Kicks account.</p>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+            <form @submit.prevent="submit" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-black mb-2">Full Name</label>
+                    <input type="text" v-model="form.name" required autofocus placeholder="Your name"
+                        class="w-full px-5 py-3 rounded-2xl bg-gray-100 border border-transparent text-black placeholder:text-gray-400 focus:outline-none focus:border-black transition-colors" />
+                    <p v-if="form.errors.name" class="text-red-500 text-sm mt-1">{{ form.errors.name }}</p>
+                </div>
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-black mb-2">Email</label>
+                    <input type="email" v-model="form.email" required placeholder="you@vibekicks.com"
+                        class="w-full px-5 py-3 rounded-2xl bg-gray-100 border border-transparent text-black placeholder:text-gray-400 focus:outline-none focus:border-black transition-colors" />
+                    <p v-if="form.errors.email" class="text-red-500 text-sm mt-1">{{ form.errors.email }}</p>
+                </div>
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-black mb-2">Password</label>
+                    <input type="password" v-model="form.password" required placeholder="••••••••"
+                        class="w-full px-5 py-3 rounded-2xl bg-gray-100 border border-transparent text-black placeholder:text-gray-400 focus:outline-none focus:border-black transition-colors" />
+                    <p v-if="form.errors.password" class="text-red-500 text-sm mt-1">{{ form.errors.password }}</p>
+                </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-black mb-2">Confirm Password</label>
+                    <input type="password" v-model="form.password_confirmation" required placeholder="••••••••"
+                        class="w-full px-5 py-3 rounded-2xl bg-gray-100 border border-transparent text-black placeholder:text-gray-400 focus:outline-none focus:border-black transition-colors" />
+                    <p v-if="form.errors.password_confirmation" class="text-red-500 text-sm mt-1">{{ form.errors.password_confirmation }}</p>
+                </div>
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
+                <button type="submit" :disabled="form.processing"
+                    class="w-full mt-2 py-3 rounded-2xl bg-black text-white font-semibold tracking-wide hover:bg-yellow-400 hover:text-black transition-all duration-300 disabled:opacity-60 active:scale-[0.98]">
+                    {{ form.processing ? 'Creating account…' : 'Create Account' }}
+                </button>
 
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    :href="route('login')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Already registered?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Register
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
+                <p class="text-center text-sm text-gray-500 pt-4">
+                    Already have an account?
+                    <Link :href="route('login')" class="font-semibold text-black hover:text-yellow-500 transition-colors">
+                        Sign in
+                    </Link>
+                </p>
+            </form>
+        </div>
+    </AuthLayout>
 </template>
