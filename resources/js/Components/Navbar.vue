@@ -1,7 +1,13 @@
 <script setup>
-import {Link , usePage} from '@inertiajs/vue3';
+import {Link , usePage , router} from '@inertiajs/vue3';
 import { useCartStore } from '@/stores/cartStore';
 import CartDrawer from './CartDrawer.vue';
+import {ref} from 'vue';
+import { useToast } from 'vue-toastification'
+import { watch } from 'vue'
+
+
+const isProfileOpen = ref(false);
 
 const cartStore = useCartStore();
 const page = usePage();
@@ -13,8 +19,18 @@ const navLinks =[
      { name : 'Our Story', href: '/our-story'},
 
 ];
-
-
+const toast = useToast();
+const logout = () => {
+    router.post(route('logout'))
+}
+const closeDropdown = (e) => {
+    if (isProfileOpen.value) isProfileOpen.value = false
+}
+watch(() => page.props.flash?.status, (message) => {
+    if (message) {
+        toast.success(message)
+    }
+})
 </script>
 
 
@@ -55,17 +71,51 @@ const navLinks =[
           </Link>
         </div>
 
-        <Link :href="page.props.auth.user ? '/dashboard' : '/login'" class="flex items-center hover:text-gray-500">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="relative">
+    <button @click="isProfileOpen = !isProfileOpen" class="flex items-center hover:text-gray-500">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span v-if="page.props.auth.user" class="ml-2 text-sm font-semibold">
+        </svg>
+        <span v-if="page.props.auth.user" class="ml-2 text-sm font-semibold">
             {{ page.props.auth.user.name }}
-          </span>
-        </Link>
-      </div>
-    </div>
+        </span>
+    </button>
 
+    <!-- Dropdown -->
+  <!-- Dropdown -->
+<div v-if="isProfileOpen" 
+     class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
+    
+    <template v-if="page.props.auth.user">
+        <Link href="/profile" @click="isProfileOpen = false"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition">
+            My Profile
+        </Link>
+        <Link href="/orders" @click="isProfileOpen = false"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition">
+            My Orders
+        </Link>
+        <hr class="my-1 border-gray-100">
+        <button @click="logout"
+                class="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition">
+            Sign Out
+        </button>
+    </template>
+
+    <template v-else>
+        <Link href="/login" @click="isProfileOpen = false"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition">
+            Login
+        </Link>
+        <Link href="/register" @click="isProfileOpen = false"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-black transition">
+            Register
+        </Link>
+    </template>
+</div>
+      </div>
+      </div>
+      </div>
     <div class="xl:hidden flex items-center px-4">
         <Link href="/cart" class="flex mr-6 items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -83,4 +133,5 @@ const navLinks =[
     @close="cartStore.isDrawerOpen = false"
 />
   </nav>
+ 
 </template>
