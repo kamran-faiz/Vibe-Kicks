@@ -1,6 +1,8 @@
 <script setup>
 import {Link , usePage} from '@inertiajs/vue3';
 import { useCartStore } from '@/stores/cartStore';
+import CartDrawer from './CartDrawer.vue';
+
 const cartStore = useCartStore();
 const page = usePage();
 
@@ -76,5 +78,9 @@ const navLinks =[
             </svg>
         </button>
     </div>
+    <CartDrawer 
+    :isOpen="cartStore.isDrawerOpen" 
+    @close="cartStore.isDrawerOpen = false"
+/>
   </nav>
 </template>

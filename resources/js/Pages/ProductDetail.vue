@@ -42,6 +42,7 @@ function addToCart() {
         return;
     }
     cartStore.addToCart({ ...props.product, size: selectedSize.value });
+    cartStore.isDrawerOpen = true
     toast.success('Product added to cart!', toastOptions);
     
     // Reset selection so the user knows the action finished

@@ -70,6 +70,7 @@ export const useCartStore = defineStore('cart', () => {
 const clearCart = () => {
     items.value = []
 }
+const isDrawerOpen = ref(false);
     // CRITICAL: You must return everything you want to use in components
     return { 
         items, 
@@ -79,7 +80,8 @@ const clearCart = () => {
         increaseQuantity,
         decreaseQuantity,
         removeFromCart,
-        clearCart   
+        clearCart   ,
+        isDrawerOpen    
     };
     
 })  
