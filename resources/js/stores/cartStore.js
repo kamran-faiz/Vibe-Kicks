@@ -57,6 +57,7 @@ export const useCartStore = defineStore('cart', () => {
     const totalItems = computed(() => {
         return items.value.reduce((total, item) => total + item.quantity, 0);
     });
+    
 
     const savedItem = localStorage.getItem('cart');
     if(savedItem) {
@@ -66,6 +67,9 @@ export const useCartStore = defineStore('cart', () => {
         localStorage.setItem('cart', JSON.stringify(newItems))
     },
 { deep : true })
+const clearCart = () => {
+    items.value = []
+}
     // CRITICAL: You must return everything you want to use in components
     return { 
         items, 
@@ -74,7 +78,8 @@ export const useCartStore = defineStore('cart', () => {
         totalPrice ,
         increaseQuantity,
         decreaseQuantity,
-        removeFromCart  
+        removeFromCart,
+        clearCart   
     };
     
-})
+})  

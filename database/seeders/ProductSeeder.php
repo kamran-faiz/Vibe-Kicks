@@ -11,7 +11,9 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         // 1. Wipe the table fresh
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         DB::table('products')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         // 2. Verified Unsplash IDs for the remaining 17 shoes
         $sneakerImages = [

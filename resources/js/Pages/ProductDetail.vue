@@ -3,6 +3,19 @@ import Navbar from '@/Components/Navbar.vue';
 import { ref } from 'vue';
 import { useCartStore } from '@/stores/cartStore';
 import { useToast } from 'vue-toastification';
+import { onMounted } from 'vue';
+import gsap from 'gsap';
+
+onMounted(() => {
+    // This will make your product details slide up smoothly
+    gsap.from(".md\\:w-1\\/2", { 
+        y: 50, 
+        opacity: 0, 
+        duration: 1, 
+        stagger: 0.2, 
+        ease: "power3.out" 
+    });
+});
 const toast = useToast();
 
 const toastOptions = {
@@ -30,6 +43,9 @@ function addToCart() {
     }
     cartStore.addToCart({ ...props.product, size: selectedSize.value });
     toast.success('Product added to cart!', toastOptions);
+    
+    // Reset selection so the user knows the action finished
+    selectedSize.value = null; 
 }
 
 </script>

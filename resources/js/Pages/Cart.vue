@@ -1,9 +1,33 @@
 <script setup>
 import Navbar from '@/Components/Navbar.vue';
 import { useCartStore } from '@/stores/cartStore';
+import { Link } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
+import { useToast } from 'vue-toastification';  
 
+const toast = useToast();
 
 const cartStore = useCartStore();
+
+const checkout = () => {
+    const cartItems = cartStore.items.map(item => ({
+        product_id: item.id,
+        quantity: item.quantity,
+        size: item.size,
+        price: item.price
+    }))
+    
+    router.post(route('checkout'), { cart: cartItems }, {
+        onSuccess: () => {
+            cartStore.clearCart();
+            toast.success('Order placed successfully!')
+        }
+    })
+}
+
+
+
+
 
 </script>
 
@@ -73,7 +97,7 @@ const cartStore = useCartStore();
 
             <div v-else class="text-center py-20 bg-white rounded-2xl shadow-sm">
                 <p class="text-gray-400 text-xl">Your cart is feeling a bit light...</p>
-                <a href="/" class="text-blue-500 underline mt-2 inline-block">Go back to shopping</a>
+                <Link href="/shop" class="text-blue-500 underline mt-2 inline-block">Go back to shopping</Link>
             </div>
         </div>
     </div>
