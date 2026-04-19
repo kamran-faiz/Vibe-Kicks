@@ -19,13 +19,21 @@ const filteredProducts = computed(() => {
         selectedBrands.value.includes(product.brand)
     );
 });
+const visible = ref(6);
+
+const displayCount = computed(() => {
+    return filteredProducts.value.slice(0, visible.value);
+});
+const loadMore = () => {
+    visible.value += 6;
+};
 </script>
 
 <template>
   <Navbar />
   
   <div class="flex min-h-screen bg-gray-100 pt-20">
-    <aside class="w-64 bg-white p-6 shadow-sm hidden md:block">
+    <aside class="w-64 bg-white p-6 shadow-sm hidden md:block sticky top-8 self-start h-fit">
       <h2 class="font-bold text-lg mb-4 italic uppercase">Filters</h2>
       
       <div class="mb-6">
@@ -42,12 +50,11 @@ const filteredProducts = computed(() => {
     <main class="flex-1 p-8">
       <div class="flex justify-between items-end mb-8">
         <h1 class="text-4xl font-black italic uppercase">All <span class="text-yellow-400">Sneakers</span></h1>
-        <p class="text-gray-500 font-mono text-sm">{{ filteredProducts.length }} Products Found</p>
       </div>
 
-      <div v-if="filteredProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div v-if="filteredProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
         <ProductCard 
-            v-for="product in filteredProducts" 
+            v-for="product in displayCount" 
             :key="product.id" 
             :id="product.id"
             :name="product.name" 
@@ -55,6 +62,10 @@ const filteredProducts = computed(() => {
             :originalPrice="product.original_price" 
             :image="product.image" 
         />
+      </div>
+
+      <div v-if="filteredProducts.length > 0" class="flex justify-center mt-8">
+        <button v-if="filteredProducts.length > visible" @click="loadMore" class="bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded">Load more</button>
       </div>
 
       <div v-else class="flex flex-col items-center justify-center py-20 text-center">
