@@ -5,7 +5,7 @@ import { useCartStore } from '@/stores/cartStore';
 import { useToast } from 'vue-toastification';
 import { onMounted } from 'vue';
 import gsap from 'gsap';
-
+import ProductCard from '@/Components/ProductCard.vue';
 const productImage = ref(null)
 const productInfo = ref(null)
 const toast = useToast();
@@ -23,6 +23,7 @@ const toastOptions = {
 };
 const props = defineProps({
     product: Object,
+    related: Array
 })
 const sizes = [6, 7, 8, 9, 10, 11];
 const selectedSize = ref(null);
@@ -100,5 +101,19 @@ onMounted(() => {
                 </div>
             </div>
         </div>
+    </div>
+    <h2 class="text-3xl font-black uppercase px-8 mb-8">You May <span class="text-yellow-400">Like</span></h2>
+        <div class="container mx-auto px-8 py-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                <ProductCard 
+    v-for="item in related" 
+    :key="item.id"
+    :id="item.id"
+    :name="item.name"
+    :price="item.price"
+    :originalPrice="item.original_price"
+    :image="item.image"
+/>
+            </div>
     </div>
 </template>

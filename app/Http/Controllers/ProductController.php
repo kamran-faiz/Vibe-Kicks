@@ -17,14 +17,21 @@ class ProductController extends Controller
         'products' => \App\Models\Product::all()
       ]);
   }
-  public function show($id)
-  {
-      // Fetch the product by ID
-      $product = Product::findOrFail($id);
-      
-      // Return the product details as JSON response
-      return Inertia::render('ProductDetail', ['product' => $product]);
-  }
+ public function show($id)
+{
+    $product = Product::findOrFail($id);
+    
+    $related = Product::where('brand', $product->brand)
+                      ->where('id', '!=', $id)
+                      ->inRandomOrder()
+                      ->limit(4)
+                      ->get();
+    
+    return Inertia::render('ProductDetail', [
+        'product' => $product,
+        'related' => $related
+    ]);
+}
   public function featured(){
     return Inertia::render('Welcome',[
         'products' => \App\Models\Product::where('is_featured', true)->get()
