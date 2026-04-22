@@ -2,6 +2,7 @@
 import Navbar from '@/Components/Navbar.vue';
 import ProductCard from '@/Components/ProductCard.vue';
 import { ref, computed } from 'vue';
+import Footer from '@/Components/Footer.vue'; 
 
 const props = defineProps({
     products: Array
@@ -32,7 +33,7 @@ const loadMore = () => {
 <template>
   <Navbar />
   
-  <div class="flex min-h-screen bg-gray-100 pt-20">
+  <div class="flex min-h-screen bg-gray-100 pt-8">
     <aside class="w-64 bg-white p-6 shadow-sm hidden md:block sticky top-8 self-start h-fit">
       <h2 class="font-bold text-lg mb-4 italic uppercase">Filters</h2>
       
@@ -74,4 +75,5 @@ const loadMore = () => {
       </div>
     </main>
   </div>
+  <Footer />
 </template>

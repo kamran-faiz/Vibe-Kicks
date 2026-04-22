@@ -15,7 +15,6 @@ const page = usePage();
 const navLinks =[
      { name : 'Home', href: '/'},
      { name : 'Shop-All', href: '/shop'},
-     { name : 'Collections', href: '/collections'},
      { name : 'Our Story', href: '/our-story'},
 
 ];
